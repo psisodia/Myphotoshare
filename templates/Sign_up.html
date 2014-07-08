@@ -1,0 +1,43 @@
+<html>
+<head>
+</head>
+<body>
+    <form class="form-signup" method="POST">
+        <h2 class="form-signup-heading">Please Sign Up</h2>
+        <div>
+        <input type="username" name='username' class="form-control" placeholder="username" required autofocus />
+        </div>
+        <p></p>
+        <div>
+        <input type="password" name='password' class="form-control"     placeholder="Password" required />
+        </div>
+        <p></p>
+        <div>
+        <input type="age" name='age' class="form-control" placeholder="Age" required autofocus />
+        </div>
+        <p></p>
+        <div>
+        <input type="zipcode" name='zipcode' class="form-control" placeholder="Zipcode" required autofocus />
+        </div>
+        <p></p>
+        <div>
+        <input type="email" name='email' class="form-control" placeholder="Email" required autofocus />
+        </div>
+        <div>
+        <button type="btn btn-lg btn-primary btn-block" type="submit">Sign Up</button>
+        </div>
+       <div class="container">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+            <ul class="flashes">
+                <li>{{message}}</li>
+            </ul>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+            {% block body %}{% endblock %}
+        </div>
+    </form>
+</body>
+</html>
