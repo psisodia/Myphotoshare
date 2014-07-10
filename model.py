@@ -4,16 +4,17 @@ from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, backref
-from sqlalchemy.orm.exc import NoResultFound
+
+
 #import pdb
 
-# ENGINE = None
-# Session = None
+ENGINE = None
+Session = None
 
 ENGINE = create_engine("sqlite:///photodb.db", echo = False)
 dbsession = scoped_session(sessionmaker(bind = ENGINE,
                                     autocommit = False,
-                                    autoflush = False))
+                                  autoflush = False))
 Base = declarative_base()
 Base.query = dbsession.query_property()
 
@@ -37,10 +38,10 @@ class Album(Base):
 
     id = Column(Integer, primary_key= True)
     name = Column(String(64), nullable=False)
-    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     # pic_id = Column(Integer, nullable=False)
 
-    user = relationship("User", backref=backref("album", order_by=id))
+    user = relationship("User", backref=backref("albums", order_by=id))
 
     def add_album(self): 
         dbsession.add(self)
@@ -52,27 +53,27 @@ class Image(Base):
     id = Column(Integer, primary_key = True)
     name = Column(String(30), nullable=False)
     img_path = Column(String(50), nullable=False)
-    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
-    album_id = Column(Integer, ForeignKey('album.id'), nullable=True)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    album_id = Column(Integer, ForeignKey('albums.id'), nullable=True)
 
-    user = relationship("User", backref=backref("image", order_by=id))
-    album = relationship("Album", backref=backref("image", order_by=id))
+    user = relationship("User", backref=backref("images", order_by=id))
+    album = relationship("Album", backref=backref("images", order_by=id))
 
     def add_picture(self): 
         dbsession.add(self)
         dbsession.commit()
 
-def connect():
-    ENGINE = None
-    Session = None
+# def connect():
+#     ENGINE = None
+#     Session = None
 
-    ENGINE = create_engine("sqlite:///photodb.db", echo = False)
-    dbsession = scoped_session(sessionmaker(bind = ENGINE,
-                                        autocommit = False,
-                                        autoflush = False))
-    # Base = declarative_base()
-    Base.query = dbsession.query_property()
-    return dbsession()
+#     ENGINE = create_engine("sqlite:///photodb.db", echo = False)
+#     dbsession = scoped_session(sessionmaker(bind = ENGINE,
+#                                         autocommit = False,
+#                                         autoflush = False))
+#     Base.query = dbsession.query_property()
+#     return dbsession()
+
 
 def main():
     """In case we need this for something"""

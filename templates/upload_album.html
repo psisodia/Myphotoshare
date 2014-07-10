@@ -1,7 +1,7 @@
-<form action="http://www.cs.tut.fi/cgi-bin/run/~jkorpela/echo.cgi"
+<form action="/upload_album"
 enctype="multipart/form-data" method="post">
 <p>
-<select>
+<select name="albumname" type="text">
   <option value="album1">A1</option>
   <option value="Album2">A2</option>
   <option value="Album3">A3</option>
@@ -14,7 +14,7 @@ Type some text (if you like):<br>
 </p>
 <p>
 Please specify a file, or a set of files:<br>
-<input type="file" name="datafile" size="40">
+<input type="file" name="imagefile" size="40">
 </p>
 <div>
 <input type="submit" value="upload">
