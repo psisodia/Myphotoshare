@@ -53,8 +53,12 @@ def album():
 @app.route("/login", methods=["POST"])
 def process_login():
     username = request.form.get('username')
+    password = request.form.get('password')
+
     row = model.dbsession.query(model.User).filter_by(username=username).all()
-    if row:
+    passrow = model.dbsession.query(model.User).filter_by(password=password).all()
+
+    if row and passrow:
         flash("Log in successful")
         session['userid'] = row[0].id
         session['username'] = row[0].username
@@ -70,37 +74,43 @@ def allowed_file(filename):
 @app.route("/upload_album", methods=["POST"])
 def upload_pic():
     username = session.get("username")
-    print username
     albumname = request.form.get('albumname')
-    print albumname
     if request.method == 'POST':
         imagefile = request.files['imagefile']
-        print imagefile.filename
-        if imagefile and allowed_file(imagefile.filename):
-            filename = secure_filename(imagefile.filename)
-            image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            print image_path
-            imagefile.save(image_path)
+        my_file= imagefile.filename
+        if my_file and allowed_file(my_file):
+            filename = secure_filename(my_file)
+            image_path = username + '_' + albumname + '_' + my_file
+            my_file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            imagefile.save(my_file_path)
             album_id = save_album(albumname)
-            image_id = save_image(imagefile,image_path,album_id)
+            image_id = save_image(my_file,image_path,album_id)
             return redirect(url_for("album", filename=filename))
 
 def save_album(albumname):
+    print albumname
+    username = session.get('username')
+    dbalbumname = model.dbsession.query(model.Album).filter_by(name=albumname).filter(model.User.username==username).filter(model.Album.user_id==model.User.id).first()
+
+    print dbalbumname
+    if dbalbumname is not None:
+        album_id = dbalbumname.id
+        print album_id
+        return album_id
+    
     album_object = model.Album(name=albumname,
-                                 user_id=session.get("userid"))
+                             user_id=session.get("userid"))
     album_object.add_album()
-    my_album = model.dbsession.query(model.Album).filter_by(name=albumname).all()
-    album_id = my_album[0].id
+    album_id = album_object.id
     return album_id
 
-def save_image(imagefile,image_path,album_id):
-    image_object = model.Image(name=imagefile,
+def save_image(my_file,image_path,album_id):
+    image_object = model.Image(name=my_file,
                                   img_path=image_path,
                                   user_id=session.get("userid"),
                                   album_id=album_id)
     image_object.add_picture()
-    image = model.dbsession.query(model.Image).filter_by(name=imagefile).all()
-    image_id = image.id
+    image_id = image_object.id
     return image_id
 
 

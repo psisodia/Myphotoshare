@@ -11,7 +11,7 @@ from sqlalchemy.orm import relationship, backref
 ENGINE = None
 Session = None
 
-ENGINE = create_engine("sqlite:///photodb.db", echo = False)
+ENGINE = create_engine("sqlite:///photodb.db", echo = True)
 dbsession = scoped_session(sessionmaker(bind = ENGINE,
                                     autocommit = False,
                                   autoflush = False))
@@ -39,8 +39,6 @@ class Album(Base):
     id = Column(Integer, primary_key= True)
     name = Column(String(64), nullable=False)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
-    # pic_id = Column(Integer, nullable=False)
-
     user = relationship("User", backref=backref("albums", order_by=id))
 
     def add_album(self): 
