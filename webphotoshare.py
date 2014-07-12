@@ -1,9 +1,9 @@
 import os
-from flask import Flask, render_template, redirect, request, url_for, flash, session
+from flask import Flask, render_template, redirect, request, url_for, flash, session, g
 import model
 import jinja2
 from werkzeug.utils import secure_filename
-UPLOAD_FOLDER = '/Users/psisodia/Python/myphotoshare/data/uploads/'
+UPLOAD_FOLDER = '/Users/psisodia/Python/myphotoshare/static/uploads/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'JPG'])
 
 
@@ -14,7 +14,9 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 print app.config['UPLOAD_FOLDER']
 
-
+@app.before_request
+def load_user_id():
+    g.username = session.get('username')
 
 @app.route("/sign_up")
 def sign_up():
@@ -39,6 +41,7 @@ def process_signup():
     else:
         user_object.add_user()
         session['userid'] = user_object.id
+        session['username'] = user_object.username
         flash("user successfully registered")
         return redirect("/upload_album")    
 
@@ -46,9 +49,9 @@ def process_signup():
 def login():
     return render_template("login.html")
 
-@app.route("/upload_album")
-def album():
-    return render_template("upload_album.html")
+# @app.route("/upload_album")
+# def album():
+#     return render_template("upload_album.html")
 
 @app.route("/login", methods=["POST"])
 def process_login():
@@ -71,6 +74,12 @@ def allowed_file(filename):
     file_ext = filename.rsplit('.',1)[1] in ALLOWED_EXTENSIONS
     return file_ext     
 
+@app.route("/upload_album", methods=["GET"])
+def list_albums():
+    userid = session["userid"]
+    album_list = model.dbsession.query(model.Album).filter_by(user_id=userid).all()
+    return render_template("upload_album.html",album_list=album_list)
+
 @app.route("/upload_album", methods=["POST"])
 def upload_pic():
     username = session.get("username")
@@ -85,7 +94,8 @@ def upload_pic():
             imagefile.save(my_file_path)
             album_id = save_album(albumname)
             image_id = save_image(my_file,image_path,album_id)
-            return redirect(url_for("album", filename=filename))
+    
+    return redirect(url_for("list_albums"))
 
 def save_album(albumname):
     print albumname
@@ -113,16 +123,16 @@ def save_image(my_file,image_path,album_id):
     image_id = image_object.id
     return image_id
 
+@app.route("/album_detail")
+def album_load():
+    userid = session['userid']
+    album_id_clicked = request.form.get['album_id']
 
+@app.route("/logout")
+def logout():
+    del session['userid']
+    return redirect(url_for("login"))
 
-
-
-
-#def update_album_id(album_id):
-
-
-
-    
-   
+       
 if __name__ == "__main__":
     app.run(debug = True)

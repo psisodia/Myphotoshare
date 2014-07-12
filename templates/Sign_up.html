@@ -1,30 +1,42 @@
-<html>
-<head>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block body %}
+    <title>Validate US Zip Code in JavaScript</title>
+    <script type="text/javascript">
+        function IsValidZipCode(zip) {
+            var isValid = /^[0-9]{5}(?:-[0-9]{4})?$/.test(zip);
+            if (isValid)
+                alert('Valid ZipCode');
+            else {
+                alert('Invalid ZipCode');
+            }
+        }
+    </script>
+
     <form class="form-signup" method="POST">
         <h2 class="form-signup-heading">Please Sign Up</h2>
         <div>
-        <input type="username" name='username' class="form-control" placeholder="username" required autofocus />
+        <input type="username" maxlength="15" name='username' class="form-control" placeholder="Enter username" required autofocus />
         </div>
         <p></p>
         <div>
-        <input type="password" name='password' class="form-control"     placeholder="Password" required />
+        <input type="password" name='password' maxlength="15" class="form-control" placeholder="Enter Password" required />
         </div>
         <p></p>
         <div>
-        <input type="age" name='age' class="form-control" placeholder="Age" required autofocus />
+        <input type="number" name='age' maxlength="3" min="18" class="form-control" placeholder="Your Age" required autofocus />
         </div>
         <p></p>
         <div>
-        <input type="zipcode" name='zipcode' class="form-control" placeholder="Zipcode" required autofocus />
+        <input type="number" name='zipcode' class="form-control" placeholder="Enter Zipcode" required autofocus />
         </div>
         <p></p>
         <div>
-        <input type="email" name='email' class="form-control" placeholder="Email" required autofocus />
+        <input type="email" name='email' class="form-control" placeholder="Enter Email" required autofocus />
         </div>
+        <p></p>
         <div>
-        <button type="btn btn-lg btn-primary btn-block" type="submit">Sign Up</button>
+        <button type="btn btn-lg btn-primary btn-block" type="submit" value="Validate"
+                onclick="IsValidZipCode(this.form.zip.value)">Sign Up</button>
         </div>
        <div class="container">
             {% with messages = get_flashed_messages() %}
@@ -36,8 +48,6 @@
             {% endfor %}
             {% endif %}
             {% endwith %}
-            {% block body %}{% endblock %}
         </div>
     </form>
-</body>
-</html>
+{% endblock %}  

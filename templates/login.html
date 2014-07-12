@@ -1,7 +1,5 @@
-<html>
-<head>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block body %}
     <form class="form-signin" method="POST">
         <h2 class="form-signin-heading">Please Sign In</h2>
         <input type="username" name='username' class="form-control" placeholder="username" required autofocus />
@@ -17,8 +15,6 @@
             {% endfor %}
             {% endif %}
             {% endwith %}
-            {% block body %}{% endblock %}
         </div>
     </form>
-</body>
-</html>
+{% endblock %}  
