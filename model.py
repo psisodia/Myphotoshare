@@ -40,6 +40,7 @@ class Album(Base):
     name = Column(String(64), nullable=False)
     desc = Column(String(54), nullable=True)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    
     user = relationship("User", backref=backref("albums", order_by=id))
 
     def add_album(self): 

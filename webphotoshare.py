@@ -78,6 +78,7 @@ def allowed_file(filename):
 def list_albums():
     userid = session["userid"]
     album_list = model.dbsession.query(model.Album).filter_by(user_id=userid).all()
+    print album_list
     return render_template("upload_album.html",album_list=album_list)
 
 @app.route("/upload_album", methods=["POST"])
@@ -132,17 +133,17 @@ def create_album():
     blogpost = request.form.get('blogpost')
     userid = session['userid']
     username= session['username']
-    new_album = model.Album(name=new_album,
+    new_album1 = model.Album(name=new_album,
                             desc=desc,
                             user_id=userid)
     dbalbumname = model.dbsession.query(model.Album).filter_by(name=new_album).filter(model.User.username==username).filter(model.Album.user_id==model.User.id).first()
     if dbalbumname:
         flash("albumname already exist, please try different albumname")
     else:
-        new_album.add_album()
+        new_album1.add_album()
         flash("Album successfully created")
         return redirect("/upload_album") 
-    newalbum_id = new_album.id 
+    newalbum_id = new_album1.id 
     blog_object = model.Blog(blogpost=blogpost,
                              user_id=userid,
                              album_id=newalbum_id)
