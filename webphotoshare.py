@@ -114,6 +114,8 @@ def save_album(albumname):
     album_id = album_object.id
     return album_id
 
+
+
 def save_image(my_file,image_path,album_id):
     image_object = model.Image(name=my_file,
                                   img_path=image_path,
@@ -123,10 +125,36 @@ def save_image(my_file,image_path,album_id):
     image_id = image_object.id
     return image_id
 
+@app.route("/create_album", methods=["POST"])
+def create_album():
+    new_album = request.form.get('new_album')
+    desc = request.form.get('desc')
+    blogpost = request.form.get('blogpost')
+    userid = session['userid']
+    username= session['username']
+    new_album = model.Album(name=new_album,
+                            desc=desc,
+                            user_id=userid)
+    dbalbumname = model.dbsession.query(model.Album).filter_by(name=new_album).filter(model.User.username==username).filter(model.Album.user_id==model.User.id).first()
+    if dbalbumname:
+        flash("albumname already exist, please try different albumname")
+    else:
+        new_album.add_album()
+        flash("Album successfully created")
+        return redirect("/upload_album") 
+    newalbum_id = new_album.id 
+    blog_object = model.Blog(blogpost=blogpost,
+                             user_id=userid,
+                             album_id=newalbum_id)
+    blog_object.add_blog()
+    return redirect("/upload_album")
+
 @app.route("/album_detail")
 def album_load():
     userid = session['userid']
     album_id_clicked = request.form.get['album_id']
+
+
 
 @app.route("/logout")
 def logout():

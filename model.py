@@ -38,6 +38,7 @@ class Album(Base):
 
     id = Column(Integer, primary_key= True)
     name = Column(String(64), nullable=False)
+    desc = Column(String(54), nullable=True)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     user = relationship("User", backref=backref("albums", order_by=id))
 
@@ -58,6 +59,20 @@ class Image(Base):
     album = relationship("Album", backref=backref("images", order_by=id))
 
     def add_picture(self): 
+        dbsession.add(self)
+        dbsession.commit()
+
+class Blogpost(Base):
+    __tablename__ = "blogs"
+    id = Column(Integer, primary_key = True)
+    BlogText = Column(String(50), nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    album_id = Column(Integer, ForeignKey('albums.id'), nullable=True)
+
+    user = relationship("User", backref=backref("blogs", order_by=id))
+    album = relationship("Album", backref=backref("blogs", order_by=id))
+
+    def add_blog(self): 
         dbsession.add(self)
         dbsession.commit()
 

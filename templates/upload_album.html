@@ -1,5 +1,56 @@
 {% extends 'base.html' %}
 {% block body %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Create Album</title>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<style type="text/css">
+    .bs-example{
+        margin: 20px;
+    }
+</style>
+</head>
+<body>
+<div class="bs-example">
+    <!-- Button HTML (to Trigger Modal) -->
+    <a href="#myModal" class="btn btn-lg btn-primary" data-toggle="modal">Create Album</a>
+    
+    <!-- Modal HTML -->
+    <div id="myModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Create Album</h4>
+                </div>
+                <form action="/create_album" enctype="multipart/form-data" method="post">
+                    <div class="modal-body">
+
+                    Please enter album name</br>
+                    <input type="text" name="new_album">
+                    <p></p>
+                    Description</br>
+                    <input type="text" name="desc">
+                    <p></p>
+                    Please write up small paragraph about this album if you would like</br>
+                    <textarea type="text" name="blogpost" row="4" cols="50">
+                    </textarea>    
+                    <p></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <input type="submit" class="btn btn-primary" value="Save album"></input>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>          
+<p></p>    
 <form action="/upload_album"
 enctype="multipart/form-data" method="post">
 <div>
@@ -50,4 +101,6 @@ Please select files<br>
         </div>
     </form>
 </form>
+</body>
+</html>  
 {% endblock %}  
