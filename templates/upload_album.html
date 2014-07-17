@@ -30,21 +30,21 @@
                 <form action="/create_album" enctype="multipart/form-data" method="post">
                     <div class="modal-body">
 
-                    Please enter album name</br>
-                    <input type="text" name="new_album">
-                    <p></p>
-                    Description</br>
-                    <input type="text" name="desc">
-                    <p></p>
-                    Please write up small paragraph about this album if you would like</br>
-                    <textarea type="text" name="blogpost" row="4" cols="50">
-                    </textarea>    
-                    <p></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <input type="submit" class="btn btn-primary" value="Save album"></input>
-                </div>
+                        Please enter album name</br>
+                        <input type="text" name="new_album">
+                        <p></p>
+                        Description</br>
+                        <input type="text" name="desc">
+                        <p></p>
+                        Please write up small paragraph about this album if you would like</br>
+                        <textarea type="text" name="blogpost" row="4" cols="50">
+                        </textarea>    
+                        <p></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <input type="submit" class="btn btn-primary" value="Save album"></input>
+                    </div>
                 </form>
             </div>
         </div>
@@ -54,11 +54,12 @@
 <form action="/upload_album"
 enctype="multipart/form-data" method="post">
 <div>
-<select name="albumname" type="text">
-  <option value="album1">A1</option>
-  <option value="Album2">A2</option>
-  <option value="Album3">A3</option>
-  <option value="None">None</option>
+    <select name="albumname" type="text">
+    {% for album in album_list %}
+    <div class="album-dropdown">
+        <option value="{{album.name}}">{{album.name}}</option>
+    </div>
+    {% endfor %}
 </select> 
 </div>
 <p></p>
@@ -82,10 +83,8 @@ Please select files<br>
     {% for album in album_list %}
     <div class="album-summary">
         <h2><a href="/album/{{album.id}}">{{album.name}}</a></h2>
-        <a href="/album/{{album.id}}">
-        <img src="static/uploads/{{album.images[0].name|replace(" ","_")}}" height="42" width="42">
-        </a>
-    </div>
+        <img src="{{ album.album_image_url() }}" height="42" width="42">
+     </div>
     {% endfor %}
 </div>
 <div class="container">

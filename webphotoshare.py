@@ -1,4 +1,5 @@
 import os
+from os import mkdir
 from flask import Flask, render_template, redirect, request, url_for, flash, session, g
 import model
 import jinja2
@@ -49,9 +50,6 @@ def process_signup():
 def login():
     return render_template("login.html")
 
-# @app.route("/upload_album")
-# def album():
-#     return render_template("upload_album.html")
 
 @app.route("/login", methods=["POST"])
 def process_login():
@@ -84,17 +82,24 @@ def list_albums():
 @app.route("/upload_album", methods=["POST"])
 def upload_pic():
     username = session.get("username")
+    user_id = session.get('userid')
     albumname = request.form.get('albumname')
     if request.method == 'POST':
         imagefile = request.files['imagefile']
         my_file= imagefile.filename
-        if my_file and allowed_file(my_file):
-            filename = secure_filename(my_file)
-            image_path = username + '_' + albumname + '_' + my_file
-            my_file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            imagefile.save(my_file_path)
-            album_id = save_album(albumname)
-            image_id = save_image(my_file,image_path,album_id)
+        my_file_type = my_file.split(".") # extract file extension from my_file
+        file_type = my_file_type.pop()
+
+    if my_file and allowed_file(my_file):
+        filename = secure_filename(my_file)
+        my_file_path = os.path.join(app.config['UPLOAD_FOLDER'])
+        album_id = save_album(albumname)
+        image_id = save_image(file_type,album_id,user_id)
+        my_dir = "%s/%d/%d/" % ( my_file_path, user_id, album_id )
+        if not os.path.exists(my_dir):
+            os.makedirs(my_dir, 0o777)   
+            image_path = "/%s/%d.%s" % (my_dir, image_id, file_type)
+            imagefile.save(image_path)
     
     return redirect(url_for("list_albums"))
 
@@ -117,9 +122,8 @@ def save_album(albumname):
 
 
 
-def save_image(my_file,image_path,album_id):
-    image_object = model.Image(name=my_file,
-                                  img_path=image_path,
+def save_image(file_type,album_id,user_id):
+    image_object = model.Image(extention=file_type,
                                   user_id=session.get("userid"),
                                   album_id=album_id)
     image_object.add_picture()
@@ -142,12 +146,14 @@ def create_album():
     else:
         new_album1.add_album()
         flash("Album successfully created")
-        return redirect("/upload_album") 
-    newalbum_id = new_album1.id 
-    blog_object = model.Blog(blogpost=blogpost,
+        newalbum_id = new_album1.id 
+        print newalbum_id
+        blog_object = model.Blogpost(BlogText=blogpost,
                              user_id=userid,
                              album_id=newalbum_id)
-    blog_object.add_blog()
+        print "this is blog object %s" % blog_object
+        blog_object.add_blog()
+        print "blog added"
     return redirect("/upload_album")
 
 @app.route("/album_detail")

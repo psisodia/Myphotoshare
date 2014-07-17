@@ -47,21 +47,31 @@ class Album(Base):
         dbsession.add(self)
         dbsession.commit()
 
+    def album_image_url(self):
+        # album.images[0].name|replace(" ","_")
+        if len(self.images) > 0:
+            print self.images[0].extention
+            image_name = str(self.images[0].id) + "." + self.images[0].extention
+            return '/static/uploads/%d/%d/%s' % (self.user_id, self.id,image_name)
+        return "/static/default_album.png"
+
 
 class Image(Base):
     __tablename__ = "images"
     id = Column(Integer, primary_key = True)
-    name = Column(String(30), nullable=False)
-    img_path = Column(String(50), nullable=False)
+    extention = Column(String(30), nullable=False)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     album_id = Column(Integer, ForeignKey('albums.id'), nullable=True)
 
     user = relationship("User", backref=backref("images", order_by=id))
     album = relationship("Album", backref=backref("images", order_by=id))
 
+    
+
     def add_picture(self): 
         dbsession.add(self)
         dbsession.commit()
+
 
 class Blogpost(Base):
     __tablename__ = "blogs"
