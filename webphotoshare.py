@@ -4,6 +4,7 @@ from flask import Flask, render_template, redirect, request, url_for, flash, ses
 import model
 import jinja2
 from werkzeug.utils import secure_filename
+import json
 UPLOAD_FOLDER = '/Users/psisodia/Python/myphotoshare/static/uploads/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'JPG'])
 
@@ -96,10 +97,11 @@ def upload_pic():
         album_id = save_album(albumname)
         image_id = save_image(file_type,album_id,user_id)
         my_dir = "%s/%d/%d/" % ( my_file_path, user_id, album_id )
+        image_path = "/%s/%d.%s" % (my_dir, image_id, file_type)
         if not os.path.exists(my_dir):
             os.makedirs(my_dir, 0o777)   
-            image_path = "/%s/%d.%s" % (my_dir, image_id, file_type)
-            imagefile.save(image_path)
+        imagefile.save(image_path)
+
     
     return redirect(url_for("list_albums"))
 
@@ -130,6 +132,9 @@ def save_image(file_type,album_id,user_id):
     image_id = image_object.id
     return image_id
 
+
+
+
 @app.route("/create_album", methods=["POST"])
 def create_album():
     new_album = request.form.get('new_album')
@@ -156,12 +161,22 @@ def create_album():
         print "blog added"
     return redirect("/upload_album")
 
-@app.route("/album_detail")
-def album_load():
+@app.route("/album_detail/<int:id>")
+def album_load(id):
     userid = session['userid']
-    album_id_clicked = request.form.get['album_id']
+    image_list = model.dbsession.query(model.Image).filter_by(album_id=id).all()
+    print "This is my image list" ,image_list
+    return render_template("album_detail.html", image_list=image_list)
 
-
+@app.route("/process_facebook_login", methods=['POST'])
+def create_fb_user():
+    fbdata = request.form.get("fbdata")
+    user_prof = json.loads(fbdata)
+    print user_prof['id']
+    email = user_prof['email']
+    row = model.dbsession.query(model.User).filter_by(username=email).all()
+    print row
+    return user_prof['email']
 
 @app.route("/logout")
 def logout():
