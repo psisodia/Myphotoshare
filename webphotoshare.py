@@ -67,12 +67,12 @@ def process_login():
     username = request.form.get('username')
     password = request.form.get('password')
 
-    row = model.dbsession.query(model.User).filter_by(username=username).all()
-    passrow = model.dbsession.query(model.User).filter_by(password=password).all()
+    row = model.dbsession.query(model.User).filter_by(username=username).first()
+    passrow = model.dbsession.query(model.User).filter_by(password=password).first()
 
     if row and passrow:
         flash("Log in successful")
-        create_user_session(row[0])
+        create_user_session(row)
         return redirect("upload_album")
     else:
         flash("Sorry we could not find your record")
@@ -86,9 +86,14 @@ def allowed_file(filename):
 def list_albums():
     print "GET"
     userid = session['userid']
+    print userid
     album_list = model.dbsession.query(model.Album).filter_by(user_id=userid).all()
     print album_list
+    if not album_list:
+        flash("You dont have any albums created yet")
     return render_template("upload_album.html",album_list=album_list)
+    
+
 
 @app.route("/upload_album", methods=["POST"])
 def upload_pic():
@@ -197,8 +202,9 @@ def create_fb_user():
         row = model.dbsession.query(model.User).filter_by(username=email).first()
 
         if row:
+            print "here"
             flash("Username already exist, please login with your existing account and password")
-            return redirect(url_for("process_login"))
+            return "ok"
 
         # This is the first time we've seen this user, create
         #   the User object and save in the database
