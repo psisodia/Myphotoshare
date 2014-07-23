@@ -31,6 +31,12 @@ def process_signup():
     age = request.form.get('age')
     zipcode = request.form.get('zipcode')
     email = request.form.get('email')
+
+    # Password is required
+    if password == "":
+        flash("Please enter a password")
+        return sign_up()
+
     user_object = model.User(username=username,
                             password=password,
                             age=age, 
@@ -51,6 +57,10 @@ def process_signup():
 def login():
     return render_template("login.html")
 
+def create_user_session(user_object):
+    session['userid'] = user_object.id
+    session['username'] = user_object.username
+    return session
 
 @app.route("/login", methods=["POST"])
 def process_login():
@@ -62,8 +72,7 @@ def process_login():
 
     if row and passrow:
         flash("Log in successful")
-        session['userid'] = row[0].id
-        session['username'] = row[0].username
+        create_user_session(row[0])
         return redirect("upload_album")
     else:
         flash("Sorry we could not find your record")
@@ -75,13 +84,15 @@ def allowed_file(filename):
 
 @app.route("/upload_album", methods=["GET"])
 def list_albums():
-    userid = session["userid"]
+    print "GET"
+    userid = session['userid']
     album_list = model.dbsession.query(model.Album).filter_by(user_id=userid).all()
     print album_list
     return render_template("upload_album.html",album_list=album_list)
 
 @app.route("/upload_album", methods=["POST"])
 def upload_pic():
+    print "POST"
     username = session.get("username")
     user_id = session.get('userid')
     albumname = request.form.get('albumname')
@@ -100,9 +111,7 @@ def upload_pic():
         image_path = "/%s/%d.%s" % (my_dir, image_id, file_type)
         if not os.path.exists(my_dir):
             os.makedirs(my_dir, 0o777)   
-        imagefile.save(image_path)
-
-    
+        imagefile.save(image_path)    
     return redirect(url_for("list_albums"))
 
 def save_album(albumname):
@@ -170,18 +179,47 @@ def album_load(id):
 
 @app.route("/process_facebook_login", methods=['POST'])
 def create_fb_user():
+    # Get the facebook data
     fbdata = request.form.get("fbdata")
     user_prof = json.loads(fbdata)
     print user_prof['id']
+
+    # Get the Facebook ID from the data
+    fbid = user_prof['id']
     email = user_prof['email']
-    row = model.dbsession.query(model.User).filter_by(username=email).all()
-    print row
-    return user_prof['email']
+
+    # Check if a user exists already with a matching fbid
+    user = model.dbsession.query(model.User).filter_by(fbid=fbid).first()
+
+    if not user:
+        # No user with the fbid exists, check if user with this 
+        #    email address exists
+        row = model.dbsession.query(model.User).filter_by(username=email).first()
+
+        if row:
+            flash("Username already exist, please login with your existing account and password")
+            return redirect(url_for("process_login"))
+
+        # This is the first time we've seen this user, create
+        #   the User object and save in the database
+        user = model.User(username=email,
+                          fbid=fbid,
+                            age="", 
+                            zipcode="",
+                            email=email)
+
+        user.add_user()
+
+    # Now "user" is our database user object, create a session 
+    #   for this user
+    create_user_session(user)
+    flash("user successfully logged in")
+    return redirect("/upload_album")    
 
 @app.route("/logout")
-def logout():
-    del session['userid']
-    return redirect(url_for("login"))
+def logout(): 
+        del session['userid']
+        return redirect(url_for("login"))
 
        
 if __name__ == "__main__":

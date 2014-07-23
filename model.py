@@ -23,7 +23,8 @@ class User(Base):
 
     id = Column(Integer, primary_key = True)
     username = Column(String(64), nullable=False)
-    password = Column(String(64), nullable=False)
+    password = Column(String(64), nullable=True)
+    fbid = Column(Integer, nullable=True)
     age = Column(Integer, nullable=True)
     zipcode = Column(String(15), nullable=True)
     email = Column(String(35), nullable=True)

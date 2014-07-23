@@ -12,8 +12,7 @@
                     <img src="/static/img/ubermelonsmall.png"><a class="navbar-brand" href="/">Welcome to photoshare</a>
                 </div>
                 <div class="navbar-collapse collapse">
-                    <fb:login-button scope="public_profile" onlogin="checkLoginState();"> 
-                    </fb:login-button>
+               
                     
                     <ul class="nav navbar-nav navbar-right">
                         {% if 'userid' in session %}
@@ -23,6 +22,8 @@
                         {% else %}
                             <li><a href="/login">Log In</a></li>
                             <li><a href="/sign_up">Sign Up</a></li>
+                            <li><fb:login-button scope="public_profile" onlogin="checkLoginState();"></li>
+                    </fb:login-button>
                         {% endif %}
                     </ul>
                 </div>
@@ -58,6 +59,7 @@
   function statusChangeCallback(response) {
     console.log('statusChangeCallback');
     console.log(response);
+
     // The response object is returned with a status field that lets the
     // app know the current login status of the person.
     // Full docs on the response object can be found in the documentation
@@ -131,7 +133,7 @@
         },
       }).done(function(data) {
         console.log(data);
-        location.replace('/upload_album');
+        //location.replace('/upload_album');
       });
       
 
