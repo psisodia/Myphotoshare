@@ -51,9 +51,10 @@ class Album(Base):
     def album_image_url(self):
         # album.images[0].name|replace(" ","_")
         if len(self.images) > 0:
-            print self.images[0].extention
-            image_name = str(self.images[0].id) + "." + self.images[0].extention
-            return '/static/uploads/%d/%d/%s' % (self.user_id, self.id,image_name)
+            return self.images[0].image_url()
+            # print self.images[0].extention
+            # image_name = str(self.images[0].id) + "." + self.images[0].extention
+            # return '/static/uploads/%d/%d/%s' % (self.user_id, self.id,image_name)
         return "/static/default_album.png"
 
 
@@ -73,6 +74,11 @@ class Image(Base):
         dbsession.add(self)
         dbsession.commit()
 
+    def image_url(self):
+        image_name = str(self.id) + "." + self.extention
+        image_aws_url = "https://s3-us-west-1.amazonaws.com" + "/" + "photoshare-webapp" + "/" + str(self.user_id) + "/" + str(self.album_id) + "/" + image_name
+        print image_aws_url
+        return image_aws_url
 
 class Blogpost(Base):
     __tablename__ = "blogs"

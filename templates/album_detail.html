@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block body %}
+<div id="image-list"> 
+    <div class="image-summary">    
+    {% for image in image_list %}
+    <img src="{{ image.image_url() }}" />
+<!--     <img src="/static/uploads/{{ image.user_id }}/{{ image.album_id }}/{{ image.id }}.{{ image.extention }}">  
+ -->    {% endfor %}
+    </div>
+</div>
+<div id="fb-root"></div>
+<div class="fb-share-button" data-href="http://hackbrightacademy.com"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=1530401767181319&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+{% endblock %}

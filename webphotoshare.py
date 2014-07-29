@@ -5,16 +5,20 @@ import model
 import jinja2
 from werkzeug.utils import secure_filename
 import json
-UPLOAD_FOLDER = '/Users/psisodia/Python/myphotoshare/static/uploads/'
+from boto.s3.connection import S3Connection
+from boto.s3.key import Key
+#UPLOAD_FOLDER = '/Users/psisodia/Python/myphotoshare/static/uploads/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'JPG'])
+PHOTOSHAREBUCKET = 'photoshare-webapp'
+conn = None
 
 
 app = Flask(__name__)
 app.secret_key = '\xf5!\x07!qj\xa4\x08\xc6\xf8\n\x8a\x95m\xe2\x04g\xbb\x98|U\xa2f\x03'
 app.jinja_env.undefined = jinja2.StrictUndefined
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+#app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-print app.config['UPLOAD_FOLDER']
+#print app.config['UPLOAD_FOLDER']
 
 @app.before_request
 def load_user_id():
@@ -94,9 +98,20 @@ def list_albums():
     return render_template("upload_album.html",album_list=album_list)
     
 
+def connect_s3():
+    global conn
+    conn = S3Connection()
+
+def create_bucket():
+    bucket = conn.create_bucket(PHOTOSHAREBUCKET)
+  
+def get_bucket():
+    b = conn.get_bucket(PHOTOSHAREBUCKET)
+    return b
 
 @app.route("/upload_album", methods=["POST"])
-def upload_pic():
+def image_upload_s3():
+    #This code was saving file to local file system
     print "POST"
     username = session.get("username")
     user_id = session.get('userid')
@@ -109,14 +124,14 @@ def upload_pic():
 
     if my_file and allowed_file(my_file):
         filename = secure_filename(my_file)
-        my_file_path = os.path.join(app.config['UPLOAD_FOLDER'])
         album_id = save_album(albumname)
         image_id = save_image(file_type,album_id,user_id)
-        my_dir = "%s/%d/%d/" % ( my_file_path, user_id, album_id )
-        image_path = "/%s/%d.%s" % (my_dir, image_id, file_type)
-        if not os.path.exists(my_dir):
-            os.makedirs(my_dir, 0o777)   
-        imagefile.save(image_path)    
+        image_path = "/%d/%d/%d.%s" % (user_id, album_id, image_id, file_type)
+        connect_s3()
+        b = get_bucket()
+        k = Key(b)     
+        k.key = image_path
+        k.set_contents_from_file(imagefile)  
     return redirect(url_for("list_albums"))
 
 def save_album(albumname):
