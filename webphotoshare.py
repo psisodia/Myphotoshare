@@ -132,6 +132,7 @@ def image_upload_s3():
         k = Key(b)     
         k.key = image_path
         k.set_contents_from_file(imagefile)  
+        k.set_acl('public-read')
     return redirect(url_for("list_albums"))
 
 def save_album(albumname):
