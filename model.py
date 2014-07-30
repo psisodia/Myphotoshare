@@ -4,14 +4,14 @@ from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, backref
-
+import os
 
 #import pdb
 
 ENGINE = None
 Session = None
 
-ENGINE = create_engine("sqlite:///photodb.db", echo = True)
+ENGINE = create_engine(os.environ.get("DATABASE_URL", "sqlite:///photodb.db"), echo = True)
 dbsession = scoped_session(sessionmaker(bind = ENGINE,
                                     autocommit = False,
                                   autoflush = False))
@@ -24,7 +24,7 @@ class User(Base):
     id = Column(Integer, primary_key = True)
     username = Column(String(64), nullable=False)
     password = Column(String(64), nullable=True)
-    fbid = Column(Integer, nullable=True)
+    fbid = Column(String, nullable=True)
     age = Column(Integer, nullable=True)
     zipcode = Column(String(15), nullable=True)
     email = Column(String(35), nullable=True)
@@ -105,6 +105,8 @@ class Blogpost(Base):
 #     Base.query = dbsession.query_property()
 #     return dbsession()
 
+def create_tables():
+    Base.metadata.create_all(ENGINE)
 
 def main():
     """In case we need this for something"""

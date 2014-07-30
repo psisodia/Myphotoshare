@@ -211,6 +211,7 @@ def create_fb_user():
 
     # Check if a user exists already with a matching fbid
     user = model.dbsession.query(model.User).filter_by(fbid=fbid).first()
+    print user
 
     if not user:
         # No user with the fbid exists, check if user with this 
@@ -226,8 +227,8 @@ def create_fb_user():
         #   the User object and save in the database
         user = model.User(username=email,
                           fbid=fbid,
-                            age="", 
-                            zipcode="",
+                            age=30, 
+                            zipcode=12345,
                             email=email)
 
         user.add_user()
