@@ -7,4 +7,5 @@ boto==2.31.1
 facebook-sdk==0.4.0
 gunicorn==19.1.0
 itsdangerous==0.24
+psycopg2==2.5.3
 wsgiref==0.1.2
