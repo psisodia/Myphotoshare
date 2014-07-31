@@ -22,7 +22,7 @@
                         {% else %}
                             <li><a href="/login">Log In</a></li>
                             <li><a href="/sign_up">Sign Up</a></li>
-                            <li><fb:login-button scope="public_profile" onlogin="checkLoginState();"></li>
+                            <li><fb:login-button scope="public_profile,publish_actions,user_photos" onlogin="checkLoginState();"></li>
                     </fb:login-button>
                         {% endif %}
                     </ul>

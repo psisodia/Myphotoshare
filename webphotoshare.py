@@ -20,6 +20,11 @@ app.jinja_env.undefined = jinja2.StrictUndefined
 
 #print app.config['UPLOAD_FOLDER']
 
+@app.route("/")
+def home():
+    return render_template("index.html")
+
+
 @app.before_request
 def load_user_id():
     g.username = session.get('username')

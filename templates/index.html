@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block body %}
+<!DOCTYPE html>
+<html>
+<head>
+    {% if 'userid' in session %}
+        <a href="/upload_album"><h1>Welcome to Photo Share</h1></a>
+        <a href="/upload_album"><img class="home-image" src="static/default_album.png"/></a>
+    {% else %}
+        <a href="/login"><h1>Welcome to Photo Share</h1></a>
+        <a href="/login"><img class="home-image" src="static/default_album.png"/></a>
+    {% endif %}
+
+</head>
+</html>
+{% endblock %}  
