@@ -1,3 +1,6 @@
 env
 *.pyc
 .DS_Store
+facebook_access.py
+s3_example.py
+

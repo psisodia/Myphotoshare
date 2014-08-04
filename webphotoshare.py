@@ -200,8 +200,12 @@ def create_album():
 def album_load(id):
     userid = session['userid']
     image_list = model.dbsession.query(model.Image).filter_by(album_id=id).all()
+    for image in image_list:
+        fbid = image.user.fbid
+        if fbid != None:
+            print image.user_id
     print "This is my image list" ,image_list
-    return render_template("album_detail.html", image_list=image_list)
+    return render_template("album_detail.html", image_list=image_list,fbid1=fbid)
 
 @app.route("/process_facebook_login", methods=['POST'])
 def create_fb_user():

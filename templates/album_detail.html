@@ -5,7 +5,9 @@
     {% for image in image_list %}
     <img src="{{ image.image_url() }}" />
     <div id="fb-root"></div>
+    {% if fbid1 != None %}
     <div class="fb-share-button" data-href="{{ image.image_url() }}"></div>
+    {% endif %}
     {% endfor %}
     </div>
 </div>
