@@ -51,7 +51,7 @@ def process_signup():
                             age=age, 
                             zipcode=zipcode,
                             email=email)
-    dbusername = model.dbsession.query(model.User).filter_by(username=username).all()
+    dbusername = model.dbsession.query(model.User).filter_by(username=username).first()
     if dbusername:
         flash("Username already exist, please try different username")
         return render_template("/Sign_up.html")
@@ -198,13 +198,23 @@ def create_album():
 
 @app.route("/album_detail/<int:id>")
 def album_load(id):
+    print 'start of route'
     userid = session['userid']
     image_list = model.dbsession.query(model.Image).filter_by(album_id=id).all()
-    for image in image_list:
-        fbid = image.user.fbid
-        if fbid != None:
-            print image.user_id
-    print "This is my image list" ,image_list
+    print 'image list', image_list
+    # if there are images in image list
+    #   then: get fbid
+    #   if there's no fbid:
+    #       then: fbid = None
+    # else:
+    #   set fbid = None
+    if image_list != []:
+        fbid = image_list[0].user.fbid
+        if fbid == None:            
+            fbid = None
+    else:
+        fbid = None
+    print fbid   
     return render_template("album_detail.html", image_list=image_list,fbid1=fbid)
 
 @app.route("/process_facebook_login", methods=['POST'])

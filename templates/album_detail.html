@@ -2,13 +2,14 @@
 {% block body %}
 <div id="image-list"> 
     <div class="image-summary">    
-    {% for image in image_list %}
-    <img src="{{ image.image_url() }}" />
-    <div id="fb-root"></div>
-    {% if fbid1 != None %}
-    <div class="fb-share-button" data-href="{{ image.image_url() }}"></div>
-    {% endif %}
-    {% endfor %}
+      {% for image in image_list %}
+      <img src="{{ image.image_url() }}" />
+      <div id="fb-root"></div>
+      {% if fbid1 %}
+      {{ fbid1 }}
+      <div class="fb-share-button" data-href="{{ image.image_url() }}"></div>
+      {% endif %}
+      {% endfor %}
     </div>
 </div>
 <script>(function(d, s, id) {

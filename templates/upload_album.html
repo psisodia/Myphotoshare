@@ -4,15 +4,13 @@
 <html lang="en">
 <head>
 <title>Create Album</title>
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div class="bs-example">
     <!-- Button HTML (to Trigger Modal) -->
-    <a href="#myModal" id="Create_album" class="btn btn-lg btn-primary" data-toggle="modal">Create Album</a>
+    <a href="#myModal" id="Create_album" class="btn btn-lg btn-primary" data-toggle="modal" style="font-size:12px">Create Album</a>
     
     <!-- Modal HTML -->
     <div id="myModal" class="modal fade">
@@ -24,14 +22,13 @@
                 </div>
                 <form action="/create_album" enctype="multipart/form-data" method="post">
                     <div class="modal-body">
-
                         Please enter album name</br>
                         <input type="text" name="new_album">
                         <p></p>
                         Description</br>
                         <input type="text" name="desc">
                         <p></p>
-                        Please write up small paragraph about this album if you would like</br>
+                        Please write up small paragraph about this album</br>
                         <textarea type="text" name="blogpost" row="4" cols="50">
                         </textarea>    
                         <p></p>
@@ -46,32 +43,31 @@
     </div>
 </div>          
 <p></p>    
-<form action="/upload_album"
-enctype="multipart/form-data" method="post">
+<form class="upload_album" action="/upload_album" enctype="multipart/form-data" method="post">
 <div>
     <select name="albumname" type="text">
-    {% for album in album_list %}
-    <div class="album-dropdown">
-        <option value="{{album.name}}">{{album.name}}</option>
-    </div>
+        {% for album in album_list %}
+        <div class="album-dropdown">
+            <option value="{{album.name}}">{{album.name}}</option>
+        </div>
     {% endfor %}
-</select> 
+    </select> 
 </div>
 <p></p>
 <div>
-Type some text (if you like:<br>
+    Type some text (if you like:<br>
 <p></p>
-<input type="text" name="Description" size="30">
+    <input type="text" name="Description" size="20">
 </div>
 <p></p>
-Please select files<br>
+    Please select files<br>
 <p></p>
 <div>
-<input type="file" name="imagefile" size="40">
+    <input type="file" name="imagefile" size="40">
 </div>
 <p></p>
 <div>
-<input type="submit" value="upload">
+    <input type="submit" value="upload">
 </div>
 <p></p>
 <div id="album-list">

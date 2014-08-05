@@ -12,12 +12,18 @@
 }
 
 #create_album{
-    width: 130px;
+    width: 100px;
     line-height: 5px;
     position: relative;
+    font: 20;
     }
-.fb-login-button{
-margin-bottom: 20px;
+.modal-content{
+    width:70%;
+}
+
+.fb_iframe_widget {
+    margin: 15px;
+    position: relative;
 }
 
 .home-image{
@@ -25,4 +31,34 @@ margin-bottom: 20px;
     width: 300px;
     display:inline-block;
 
-    }    
+    }   
+
+.form-signup{
+    width: 70%;
+    background: ;
+    background: Teal;
+} 
+
+.navbar-static-top{
+    background-color: Teal;
+    color: black;
+
+}
+
+.navbar .nav > li > a, .navbar .nav > li > a, .navbar .nav > li:visited {
+    color: black;
+}
+
+.{
+    background-color: Teal;
+    color: #000000;
+    padding-top: 10px;
+
+}
+
+.form-signin{
+    width: 70%;
+    background: Teal;
+
+}
+

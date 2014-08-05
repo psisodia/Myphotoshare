@@ -6,24 +6,22 @@
         <link rel="stylesheet" href="/static/css/style.css" />
     </head>
     <body>
-        <div class="navbar navbar-inverse navbar-static-top">
+        <div class="navbar navbar-inverse navbar-static-top login">
             <div class="container">
                 <div class="navbar-header">
-                    <img src="/static/img/ubermelonsmall.png"><a class="navbar-brand" href="/">Welcome to photoshare</a>
+                   <h3>Welcome to photoshare</h3>
                 </div>
-                <div class="navbar-collapse collapse">
-               
-                    
-                    <ul class="nav navbar-nav navbar-right">
+                <div class="navbar-collapse collapse">             
+                    <ul class="nav navbar-nav navbar-right login">
                         {% if 'userid' in session %}
                             <li><a id="logout" href="/logout">Log out</a></li>
-                            <font size="3" color="white">
                             <li>username:{{g.username}}</li></font>
                         {% else %}
                             <li><a href="/login">Log In</a></li>
                             <li><a href="/sign_up">Sign Up</a></li>
-                            <li><fb:login-button scope="public_profile,publish_actions,user_photos" onlogin="checkLoginState();"></li>
-                    </fb:login-button>
+                            <li><fb:login-button 
+                                scope="public_profile,publish_actions,user_photos" onlogin="checkLoginState();"></li>
+                                </fb:login-button>
                         {% endif %}
                     </ul>
                 </div>
