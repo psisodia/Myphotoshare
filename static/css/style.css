@@ -4,6 +4,11 @@
     height: 200px;
     margin-left: 10px;
     margin-bottom: 10px;
+    display: inline-block;
+}
+
+.individualiamge{
+    display: inline-block;
 }
 
 .album-summary{
@@ -13,12 +18,32 @@
 
 #create_album{
     width: 100px;
-    line-height: 5px;
     position: relative;
     font: 20;
     }
+
 .modal-content{
     width:70%;
+}
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
 }
 
 .fb_iframe_widget {
@@ -35,12 +60,19 @@
 
 .form-signup{
     width: 70%;
-    background: ;
-    background: Teal;
+    background: #CCFFCC;
+    -moz-border-radius: 7px;
+    -webkit-border-radius: 7px;
+    border-radius: 10px; /* future proofing */
+    -khtml-border-radius: 7px; /* for old Konqueror browsers */
+    margin: 0 auto;
+    padding: 10px;
+    border: #CCCCFF solid 4px;
+
 } 
 
 .navbar-static-top{
-    background-color: Teal;
+    background-color: #CCCCFF;
     color: black;
 
 }
@@ -49,16 +81,46 @@
     color: black;
 }
 
-.{
-    background-color: Teal;
-    color: #000000;
-    padding-top: 10px;
-
+#username {
+    margin: 14px;
 }
+
 
 .form-signin{
     width: 70%;
-    background: Teal;
+    background: #CCFFCC;
+    -moz-border-radius: 7px;
+    -webkit-border-radius: 7px;
+    border-radius: 10px; /* future proofing */
+    -khtml-border-radius: 7px; /* for old Konqueror browsers */
+    margin: 0 auto;
+    padding: 10px;
+    border: #CCCCFF solid 4px;
+
+
+}
+
+.form-control{
+    margin: 10px;
+}
+
+.selectpicker{
+    width: 100px;
+    line-height: 5px;
+    position: relative;
+    font: 20;
+}
+
+.uploadalbum{
+    width: 70%;
+    background: #CCFFCC; 
+    -moz-border-radius: 7px;
+    -webkit-border-radius: 7px;
+    border-radius: 10px; /* future proofing */
+    -khtml-border-radius: 7px; /* for old Konqueror browsers */
+    margin: 0 auto;
+    padding: 10px;
+    border: #CCCCFF solid 4px;
 
 }
 

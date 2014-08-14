@@ -1,7 +1,6 @@
 <html>
     <head>
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js#sthash.sjSL1dcU.dpuf"/>
         <script src="/static/js/jquery-1.11.1.js" type="text/javascript"></script>
         <link rel="stylesheet" href="/static/css/style.css" />
     </head>
@@ -9,13 +8,15 @@
         <div class="navbar navbar-inverse navbar-static-top login">
             <div class="container">
                 <div class="navbar-header">
-                   <h3>Welcome to photoshare</h3>
+                    <h3><span class="glyphicon glyphicon-camera"></span>
+Welcome to photoshare</h3>
                 </div>
                 <div class="navbar-collapse collapse">             
                     <ul class="nav navbar-nav navbar-right login">
                         {% if 'userid' in session %}
                             <li><a id="logout" href="/logout">Log out</a></li>
-                            <li>username:{{g.username}}</li></font>
+                            <li id="username">username:{{g.username}}</li>
+                            <li><a href="{{ url_for('list_albums') }}">Upload album</a></li>
                         {% else %}
                             <li><a href="/login">Log In</a></li>
                             <li><a href="/sign_up">Sign Up</a></li>

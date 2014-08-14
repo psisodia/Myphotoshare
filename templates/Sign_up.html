@@ -11,8 +11,9 @@
             }
         }
     </script>
-    <form class="form-signup" method="POST">
+    <form class="form-signup" action="/sign_up" method="POST">
         <h3 class="form-signup-heading">Please Sign Up</h3>
+        <span class="error">This field is required</span>
         <div>
         <input type="username" maxlength="15" name='username' class="form-control" placeholder="Enter username" required autofocus />
         </div>
@@ -34,19 +35,7 @@
         </div>
         <p></p>
         <div>
-        <button type="btn btn-lg btn-primary btn-block" type="submit" value="Validate"
-                onclick="IsValidZipCode(this.form.zip.value)">Sign Up</button>
-        </div>
-       <div class="container">
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            {% for message in messages %}
-            <ul class="flashes">
-                <li>{{message}}</li>
-            </ul>
-            {% endfor %}
-            {% endif %}
-            {% endwith %}
+        <button class="btn btn-default" type="submit button" formaction="/sign_up" value="Submit">Sign Up </button>
         </div>
     </form>
 {% endblock %}  

@@ -8,89 +8,78 @@
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="bs-example">
-    <!-- Button HTML (to Trigger Modal) -->
-    <a href="#myModal" id="Create_album" class="btn btn-lg btn-primary" data-toggle="modal" style="font-size:12px">Create Album</a>
-    
-    <!-- Modal HTML -->
-    <div id="myModal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Create Album</h4>
+<div class="uploadalbum">
+    <div class="bs-example">
+        <!-- Button HTML (to Trigger Modal) -->
+        <a href="#myModal" id="Create_album" class="btn btn-lg btn-primary" data-toggle="modal" style="font-size:12px">Create Album</a>
+        
+        <!-- Modal HTML -->
+        <div id="myModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button class="btn btn-default close" type="button" data-dismiss="modal"aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Create Album</h4>
+                    </div>
+                    <form action="/create_album" enctype="multipart/form-data" method="post">
+                        <div class="modal-body">
+                            Please enter album name</br>
+                            <input type="text" name="new_album">
+                            <p></p>
+                            Description</br>
+                            <input type="text" name="desc">
+                            <p></p>
+                            Please write up small paragraph about this album</br>
+                            <textarea type="text" name="blogpost" row="4" cols="50">
+                            </textarea>    
+                            <p></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <input type="submit" class="btn btn-primary" value="Save album"></input>
+                        </div>
+                    </form>
                 </div>
-                <form action="/create_album" enctype="multipart/form-data" method="post">
-                    <div class="modal-body">
-                        Please enter album name</br>
-                        <input type="text" name="new_album">
-                        <p></p>
-                        Description</br>
-                        <input type="text" name="desc">
-                        <p></p>
-                        Please write up small paragraph about this album</br>
-                        <textarea type="text" name="blogpost" row="4" cols="50">
-                        </textarea>    
-                        <p></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <input type="submit" class="btn btn-primary" value="Save album"></input>
-                    </div>
-                </form>
             </div>
         </div>
-    </div>
-</div>          
+    </div>          
 <p></p>    
-<form class="upload_album" action="/upload_album" enctype="multipart/form-data" method="post">
-<div>
-    <select name="albumname" type="text">
-        {% for album in album_list %}
-        <div class="album-dropdown">
+    <form class="upload_album" action="/upload_album" enctype="multipart/form-data" method="post">
+        <select class="selectpicker" name="albumname">
+            {% for album in album_list %}
             <option value="{{album.name}}">{{album.name}}</option>
-        </div>
-    {% endfor %}
-    </select> 
-</div>
-<p></p>
-<div>
-    Type some text (if you like:<br>
-<p></p>
-    <input type="text" name="Description" size="20">
-</div>
-<p></p>
-    Please select files<br>
-<p></p>
-<div>
-    <input type="file" name="imagefile" size="40">
-</div>
-<p></p>
-<div>
-    <input type="submit" value="upload">
-</div>
-<p></p>
-<div id="album-list">
-    {% for album in album_list %}
-    <div class="album-summary">
-        <h2><a href="/album_detail/{{album.id}}">{{album.name}}</a></h2>
-        <img src="{{ album.album_image_url() }}" height="42" width="42">
-     </div>
-    {% endfor %}
-</div>
-<div class="container">
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            {% for message in messages %}
-            <ul class="flashes">
-                <li>{{message}}</li>
-            </ul>
             {% endfor %}
-            {% endif %}
-            {% endwith %}
+        </select>
+        <p></p>
+        <div>
+            Type some text (if you like:<br>
+        <p></p>
+            <input type="text" name="Description" size="20">
         </div>
+        <p></p>
+            Please select files<br>
+        <p></p>
+        <div>
+            <span class="btn btn-default btn-file">
+                Browse<input type="file" name="imagefile">
+            </span>
+        </div>
+        <p></p>
+        <div>
+            <button class="btn btn-default" type="submit button" formaction="/upload_album" value="Submit">upload</button>        
+        </div>
+        <p></p>
+        <div id="album-list">
+            {% for album in album_list %}
+            <div class="album-summary">
+                <h2><a href="/album_detail/{{album.id}}">{{album.name}}</a></h2>
+                <img src="{{ album.album_image_url() }}" height="42" width="42">
+             </div>
+            {% endfor %}
+        </div>
+            </form>
     </form>
-</form>
+</div>
 </body>
 </html>  
 {% endblock %}  
