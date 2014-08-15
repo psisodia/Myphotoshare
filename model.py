@@ -13,7 +13,7 @@ url = urlparse.urlparse(os.environ["DATABASE_URL_LOCAL"])
 
 print url
 conn = psycopg2.connect(
-    database=url.path[1:]
+    database=url.path[1:],
     user=url.username,
     password=url.password,
     host=url.hostname,
