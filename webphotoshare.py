@@ -52,6 +52,7 @@ def process_signup():
                             zipcode=zipcode,
                             email=email)
     dbusername = model.dbsession.query(model.User).filter_by(username=username).first()
+    print dbusername
     if dbusername:
         flash("Username already exist, please try different username")
         return render_template("/Sign_up.html")

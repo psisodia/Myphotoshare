@@ -10,6 +10,45 @@
                 alert('Invalid ZipCode');
             }
         }
+        function validateForm() {
+            var x = document.forms["myForm"]["email"].value;
+            var atpos = x.indexOf("@");
+            var dotpos = x.lastIndexOf(".");
+            if (atpos< 1 || dotpos<atpos+2 || dotpos+2>=x.length) {
+                alert("Not a valid e-mail address");
+                return false;
+            }
+        }
+        function validateForm() {
+            var x = document.forms["myForm"]["fname"].value;
+            if (x == null || x == "") {
+                alert("First name must be filled out");
+                return false;
+            }
+        }
+        $(document).ready(function () {
+            $( "#signup" ).click(function() {
+                console.log("click");
+                $( "input" ).each(function( index ) {
+                    var inputdata = $( this ).val();
+                    console.log(inputdata, $(this).attr("name"))
+                    if (inputdata === "" ) {
+                        alert("Username must be filled out");
+                        return false;
+                    }
+                    if ($( this ).attr("name") === "zipcode"){
+                       var myzip = $( this ).val();
+                       console.log(myzip);
+                       var isValid = myzip.match(/^[0-9]{5}(?:-[0-9]{4})?$/);
+
+                       console.log(isValid);
+                    }
+                    if (isValid === null) {
+                        alert('Invalid ZipCode');
+                    }
+                });
+            });
+        });
     </script>
     <form class="form-signup" action="/sign_up" method="POST">
         <h3 class="form-signup-heading">Please Sign Up</h3>
@@ -35,7 +74,7 @@
         </div>
         <p></p>
         <div>
-        <button class="btn btn-default" type="submit button" formaction="/sign_up" value="Submit">Sign Up </button>
+        <button id="signup" class="btn btn-default" type="submit button" formaction="/sign_up" value="Submit">Sign Up </button>
         </div>
     </form>
 {% endblock %}  
