@@ -27,7 +27,7 @@ import urlparse
 ENGINE = None
 Session = None
 
-ENGINE = create_engine(os.environ.get("DATABASE_URL", "DATABASE_URL_LOCAL"), echo = True)
+ENGINE = create_engine(os.environ.get("DATABASE_URL", "postgresql://localhost:5432/webphotoshare"), echo = True)
 dbsession = scoped_session(sessionmaker(bind = ENGINE,
                                     autocommit = False,
                                   autoflush = False))
